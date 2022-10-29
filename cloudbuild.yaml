@@ -1,0 +1,22 @@
+steps:
+- name: gcr.io/true-eye-360908/terraform
+  args:
+  - init
+  - -input=false
+- name: gcr.io/true-eye-360908/terraform
+  args:
+  - plan
+  - -input=false
+  - -out=tfplan 
+- name: gcr.io/true-eye-360908/terraform
+  args:
+  - apply
+  - -auto-approve
+  - -input=false
+  - tfplan
+  env:
+  - 'bi=$BUILD_ID'
+artifacts:
+  objects:
+    location: 'gs://gcf-sources-211648919762-us-central1/terraform/cloudbuild/apply/$BUILD_ID'
+    paths: ['cloudbuild.yaml', 'tfplan','*']
